@@ -114,9 +114,11 @@
       card.style.width = NODE_WIDTH + "px";
       card.style.height = NODE_HEIGHT + "px";
 
-      // Role color accent (left border)
+      // Role color accent (left border) — only for assistant; user stays neutral
       const roleColor = ROLE_COLORS[node.role] || ROLE_COLORS.system;
-      card.style.borderLeftColor = roleColor;
+      if (node.role === "assistant") {
+        card.style.borderLeftColor = roleColor;
+      }
 
       // Branch point indicator
       if (node.isBranchPoint) {
