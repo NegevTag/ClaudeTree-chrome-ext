@@ -155,17 +155,24 @@
 .ctv-node {
   position: absolute;
   background: var(--ctv-bg-raised);
-  border: 1px solid var(--ctv-border);
-  border-left: 3px solid var(--ctv-border);
-  border-radius: 12px;
-  padding: 5px 8px 5px 10px;
+  border: 1px solid var(--ctv-border-soft);
+  border-radius: 10px;
+  padding: 5px 10px;
   cursor: pointer;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 3px;
   box-sizing: border-box;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+/* Subtle role differentiation — slightly different background tint */
+.ctv-node[data-role="user"] {
+  background: var(--ctv-bg-subtle);
+}
+.ctv-node[data-role="assistant"] {
+  background: var(--ctv-bg-raised);
 }
 
 .ctv-node:hover {
@@ -179,9 +186,9 @@
   box-shadow: 0 0 0 1px var(--ctv-accent);
 }
 
-/* Branch point: thicker left border */
+/* Branch point: slightly stronger border */
 .ctv-node.ctv-branch-point {
-  border-left-width: 4px;
+  border-color: var(--ctv-border);
 }
 
 /* Leaf node: slightly faded */
@@ -203,6 +210,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   line-height: 1;
+  color: var(--ctv-text-faint);
 }
 
 /* ── Datetime badge (top-right corner of card) ───────────────── */
