@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Claude Tree Visual",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "description": "Visualize Claude.ai conversations as a navigable tree instead of linear chat",
   "permissions": ["activeTab", "storage"],
   "host_permissions": ["https://claude.ai/*"],

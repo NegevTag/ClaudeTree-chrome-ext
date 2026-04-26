@@ -173,12 +173,21 @@
     container.appendChild(canvas);
 
     // ── Zoom + drag (transform-based) ─────────────────────────────
-    // Fit the whole tree in view on first render
-    const fitScaleX = container.clientWidth / canvasWidth;
-    const fitScaleY = container.clientHeight / canvasHeight;
-    let scale = Math.min(fitScaleX, fitScaleY, 1) * 0.92; // 92% so edges aren't clipped
-    let panX = (container.clientWidth - canvasWidth * scale) / 2;
-    let panY = (container.clientHeight - canvasHeight * scale) / 2;
+    // Restore previous view if available (auto-refresh shouldn't reset pan/zoom);
+    // otherwise fit the whole tree in view.
+    const saved = window.ClaudeTreeVisual._viewState;
+    let scale, panX, panY;
+    if (saved && saved.scale != null) {
+      scale = saved.scale;
+      panX = saved.panX;
+      panY = saved.panY;
+    } else {
+      const fitScaleX = container.clientWidth / canvasWidth;
+      const fitScaleY = container.clientHeight / canvasHeight;
+      scale = Math.min(fitScaleX, fitScaleY, 1) * 0.92;
+      panX = (container.clientWidth - canvasWidth * scale) / 2;
+      panY = (container.clientHeight - canvasHeight * scale) / 2;
+    }
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
@@ -187,7 +196,9 @@
 
     function applyTransform() {
       canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+      window.ClaudeTreeVisual._viewState = { scale, panX, panY };
     }
+    applyTransform();
 
     applyTransform(); // apply initial centering
 
@@ -267,4 +278,7 @@
   window.ClaudeTreeVisual = window.ClaudeTreeVisual || {};
   window.ClaudeTreeVisual.renderTree = renderTree;
   window.ClaudeTreeVisual.highlightPath = highlightPath;
+  window.ClaudeTreeVisual.resetView = function () {
+    window.ClaudeTreeVisual._viewState = null;
+  };
 })();

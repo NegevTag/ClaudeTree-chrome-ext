@@ -123,12 +123,132 @@
     panelVisible = true;
     pushLayout();
     loadTree();
+    startAutoRefresh();
+    removeReopenButton();
   }
 
   function hidePanel() {
     if (panelEl) panelEl.classList.remove("ctv-visible");
     panelVisible = false;
     restoreLayout();
+    stopAutoRefresh();
+    ensureReopenButton();
+  }
+
+  // ── Auto-refresh ────────────────────────────────────────────────
+  // Polls the API every few seconds; only re-renders if message count changed.
+
+  let autoRefreshTimer = null;
+  const AUTO_REFRESH_MS = 5000;
+
+  function startAutoRefresh() {
+    stopAutoRefresh();
+    autoRefreshTimer = setInterval(autoRefreshTick, AUTO_REFRESH_MS);
+  }
+
+  function stopAutoRefresh() {
+    if (autoRefreshTimer) {
+      clearInterval(autoRefreshTimer);
+      autoRefreshTimer = null;
+    }
+  }
+
+  async function autoRefreshTick() {
+    if (!panelVisible) return;
+    const convId = getConversationId();
+    if (!convId || convId !== currentConversationId) return;
+    try {
+      const apiResponse = await fetchTree(convId);
+      const tree = window.ClaudeTreeVisual.normalizeTree(apiResponse);
+      // Skip render if nothing changed (cheap heuristic: node count)
+      if (currentTree && tree.nodes.size === currentTree.nodes.size) return;
+      currentTree = tree;
+      const layout = window.ClaudeTreeVisual.computeLayout(tree);
+      const contentEl = panelEl.querySelector(".ctv-content");
+      // Preserves view state because we don't call resetView()
+      window.ClaudeTreeVisual.renderTree(contentEl, tree, layout, handleNodeClick);
+    } catch (err) {
+      console.warn("[ClaudeTreeVisual] auto-refresh failed:", err.message);
+    }
+  }
+
+  // ── Reopen button (circle, below Claude's Share button) ─────────
+
+  let reopenBtnEl = null;
+  let reopenObserver = null;
+
+  function findShareAnchor() {
+    // Try to find Claude's Share button. We match by visible text since
+    // class names are obfuscated. Looks at all buttons in the top header.
+    const buttons = document.querySelectorAll("button, a");
+    for (const b of buttons) {
+      const t = (b.textContent || "").trim().toLowerCase();
+      const aria = (b.getAttribute("aria-label") || "").toLowerCase();
+      if (t === "share" || aria.includes("share")) return b;
+    }
+    return null;
+  }
+
+  function ensureReopenButton() {
+    if (reopenBtnEl && document.body.contains(reopenBtnEl)) return;
+    createReopenButton();
+    // Re-anchor on Claude's SPA re-renders
+    if (!reopenObserver) {
+      reopenObserver = new MutationObserver(() => {
+        if (panelVisible) return;
+        if (!reopenBtnEl || !document.body.contains(reopenBtnEl)) {
+          createReopenButton();
+        } else {
+          positionReopenButton();
+        }
+      });
+      reopenObserver.observe(document.body, { childList: true, subtree: true });
+    }
+  }
+
+  function createReopenButton() {
+    if (reopenBtnEl) reopenBtnEl.remove();
+    reopenBtnEl = document.createElement("button");
+    reopenBtnEl.id = "ctv-reopen-btn";
+    reopenBtnEl.title = "Open conversation tree";
+    reopenBtnEl.innerHTML = `
+      <svg viewBox="0 0 16 16" width="16" height="16" fill="none"
+           stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+        <line x1="8" y1="4" x2="4" y2="10"/>
+        <line x1="8" y1="4" x2="12" y2="10"/>
+        <circle cx="8" cy="3" r="1.6" fill="currentColor"/>
+        <circle cx="4" cy="11" r="1.6" fill="currentColor"/>
+        <circle cx="12" cy="11" r="1.6" fill="currentColor"/>
+      </svg>
+    `;
+    reopenBtnEl.addEventListener("click", showPanel);
+    document.body.appendChild(reopenBtnEl);
+    positionReopenButton();
+  }
+
+  function positionReopenButton() {
+    if (!reopenBtnEl) return;
+    const anchor = findShareAnchor();
+    if (anchor) {
+      const rect = anchor.getBoundingClientRect();
+      reopenBtnEl.style.top = rect.bottom + 8 + "px";
+      reopenBtnEl.style.left = rect.left + rect.width / 2 - 16 + "px";
+      reopenBtnEl.style.right = "auto";
+    } else {
+      // Fallback: top-right corner
+      reopenBtnEl.style.top = "60px";
+      reopenBtnEl.style.right = "16px";
+      reopenBtnEl.style.left = "auto";
+    }
+  }
+
+  window.addEventListener("resize", positionReopenButton);
+
+  function removeReopenButton() {
+    if (reopenBtnEl) {
+      reopenBtnEl.remove();
+      reopenBtnEl = null;
+    }
   }
 
   function togglePanel() {
@@ -220,6 +340,9 @@
       return;
     }
 
+    if (convId !== currentConversationId) {
+      window.ClaudeTreeVisual.resetView();
+    }
     currentConversationId = convId;
     setTitle("Loading…");
     setStatus("Loading conversation tree…");
@@ -333,4 +456,7 @@
       togglePanel();
     }
   });
+
+  // Show the reopen button on first load (panel starts hidden)
+  ensureReopenButton();
 })();

@@ -34,14 +34,15 @@
    * Extract text content from a message's content array.
    */
   function getMessageText(msg) {
-    if (typeof msg.text === "string") return msg.text;
-    if (!Array.isArray(msg.content)) return "[no content]";
-
-    const textParts = msg.content
-      .filter((block) => block.type === "text" && block.text)
-      .map((block) => block.text);
-
-    return textParts.join("\n") || "[no text content]";
+    // Prefer content blocks if present (tree=True often returns msg.text="")
+    if (Array.isArray(msg.content)) {
+      const textParts = msg.content
+        .filter((block) => block && block.type === "text" && block.text)
+        .map((block) => block.text);
+      if (textParts.length) return textParts.join("\n");
+    }
+    if (typeof msg.text === "string" && msg.text.trim()) return msg.text;
+    return "[no text content]";
   }
 
   /**
