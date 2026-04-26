@@ -419,7 +419,7 @@
 
   function flashElement(el) {
     el.style.transition = "outline 0.2s ease";
-    el.style.outline = "2px solid #d97757";
+    el.style.outline = "2px solid #5B7BD5";
     setTimeout(() => { el.style.outline = "none"; }, 1500);
   }
 

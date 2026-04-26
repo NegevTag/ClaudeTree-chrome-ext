@@ -1,0 +1,20 @@
+/* Claude orange palette — accent = #d97757, neutral user grey, near-white text.
+ * To activate: copy this #ctv-panel block over the one in ../styles.css,
+ * then update tree-render.js ROLE_COLORS and content.js flash color to:
+ *   user=#d4d4d4, assistant=#d97757, flash=#d97757
+ */
+
+#ctv-panel {
+  --ctv-bg:          #262624;   /* Claude.ai dark bg */
+  --ctv-bg-raised:   #30302e;
+  --ctv-bg-subtle:   #3a3a37;
+  --ctv-border:      #4a4a47;
+  --ctv-border-soft: #3f3f3c;
+  --ctv-text:        #e8e6e3;   /* near-white */
+  --ctv-text-muted:  #b0aea9;
+  --ctv-text-faint:  #888680;
+  --ctv-accent:      #d97757;   /* Claude orange */
+  --ctv-user:        #d4d4d4;   /* neutral light grey */
+  --ctv-claude:      #d97757;
+  --ctv-shadow:      rgba(0, 0, 0, 0.25);
+}

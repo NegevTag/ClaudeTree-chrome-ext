@@ -1,26 +1,8 @@
 /* styles.css — Tufte-inspired, matches Claude.ai color palette (light + dark). */
 
 /* ── Palette ───────────────────────────────────────────────── */
-/* Active: Claude's official palette (claude=#d97757 accent, neutral user). */
+/* Active: original purple/blue/green. Other palettes live in ./palettes/ */
 
-#ctv-panel {
-  --ctv-bg:          #262624;   /* Claude.ai dark bg */
-  --ctv-bg-raised:   #30302e;
-  --ctv-bg-subtle:   #3a3a37;
-  --ctv-border:      #4a4a47;
-  --ctv-border-soft: #3f3f3c;
-  --ctv-text:        #e8e6e3;   /* near-white */
-  --ctv-text-muted:  #b0aea9;
-  --ctv-text-faint:  #888680;
-  --ctv-accent:      #d97757;   /* Claude orange */
-  --ctv-user:        #d4d4d4;   /* neutral light grey */
-  --ctv-claude:      #d97757;   /* Claude orange */
-  --ctv-shadow:      rgba(0, 0, 0, 0.25);
-}
-
-/* ── Legacy palette (purple/blue/green) ─────────────────────── */
-/* Kept for reference. To restore: swap into the #ctv-panel block above. */
-/*
 #ctv-panel {
   --ctv-bg:          #2b2b2b;
   --ctv-bg-raised:   #363636;
@@ -35,7 +17,6 @@
   --ctv-claude:      #8ec99a;
   --ctv-shadow:      rgba(0, 0, 0, 0.2);
 }
-*/
 
 /* ── Panel container ─────────────────────────────────────────── */
 
@@ -175,8 +156,8 @@
 
 /* Active (clicked) node */
 .ctv-node-active {
-  border-color: var(--ctv-accent) !important;
-  box-shadow: 0 0 0 1px var(--ctv-accent);
+  border-color: var(--ctv-user) !important;
+  box-shadow: 0 0 0 1px var(--ctv-user);
 }
 
 /* Branch point: thicker left border */
