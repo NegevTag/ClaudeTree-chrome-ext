@@ -1,8 +1,26 @@
 /* styles.css — Tufte-inspired, matches Claude.ai color palette (light + dark). */
 
-/* ── Claude palette via CSS variables ───────────────────────── */
-/* We read claude.ai's own CSS vars where possible; fall back to hardcoded. */
+/* ── Palette ───────────────────────────────────────────────── */
+/* Active: Claude's official palette (claude=#d97757 accent, neutral user). */
 
+#ctv-panel {
+  --ctv-bg:          #262624;   /* Claude.ai dark bg */
+  --ctv-bg-raised:   #30302e;
+  --ctv-bg-subtle:   #3a3a37;
+  --ctv-border:      #4a4a47;
+  --ctv-border-soft: #3f3f3c;
+  --ctv-text:        #e8e6e3;   /* near-white */
+  --ctv-text-muted:  #b0aea9;
+  --ctv-text-faint:  #888680;
+  --ctv-accent:      #d97757;   /* Claude orange */
+  --ctv-user:        #d4d4d4;   /* neutral light grey */
+  --ctv-claude:      #d97757;   /* Claude orange */
+  --ctv-shadow:      rgba(0, 0, 0, 0.25);
+}
+
+/* ── Legacy palette (purple/blue/green) ─────────────────────── */
+/* Kept for reference. To restore: swap into the #ctv-panel block above. */
+/*
 #ctv-panel {
   --ctv-bg:          #2b2b2b;
   --ctv-bg-raised:   #363636;
@@ -17,6 +35,7 @@
   --ctv-claude:      #8ec99a;
   --ctv-shadow:      rgba(0, 0, 0, 0.2);
 }
+*/
 
 /* ── Panel container ─────────────────────────────────────────── */
 
@@ -156,8 +175,8 @@
 
 /* Active (clicked) node */
 .ctv-node-active {
-  border-color: var(--ctv-user) !important;
-  box-shadow: 0 0 0 1px var(--ctv-user);
+  border-color: var(--ctv-accent) !important;
+  box-shadow: 0 0 0 1px var(--ctv-accent);
 }
 
 /* Branch point: thicker left border */
@@ -296,22 +315,26 @@
 /* ── Custom tooltip (replaces native title for controllable delay) ── */
 
 #ctv-tooltip {
-  position: fixed;
-  z-index: 2147483647;
-  max-width: 320px;
-  padding: 6px 9px;
-  background: #1f1f1f;
-  color: #d4cdd6;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 11px;
-  line-height: 1.4;
-  border: 1px solid #4a4a4a;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  pointer-events: none;
-  white-space: pre-wrap;
-  word-break: break-word;
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  width: max-content !important;
+  max-width: 320px !important;
+  min-width: 80px !important;
+  padding: 6px 9px !important;
+  background: #1f1f1f !important;
+  color: #d4cdd6 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  border: 1px solid #4a4a4a !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  pointer-events: none !important;
+  white-space: pre-wrap !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
   display: none;
+  box-sizing: border-box !important;
 }
 
 #ctv-tooltip.ctv-tooltip-visible {
