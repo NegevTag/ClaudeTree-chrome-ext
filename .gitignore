@@ -6,3 +6,10 @@ node_modules/
 # Screenshots / scratch
 Screenshot*.png
 *.screenshot.png
+
+# Diagnostic dumps
+ctv-diag.json
+*.diag.json
+
+# Out-of-band notes shared with Claude (not for the repo)
+.communication-with-claude/
