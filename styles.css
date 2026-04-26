@@ -155,8 +155,8 @@
 .ctv-node {
   position: absolute;
   background: var(--ctv-bg-raised);
-  border: 1px solid var(--ctv-border);
-  border-left: 3px solid var(--ctv-border);
+  border: 1px solid var(--ctv-border-soft);
+  border-left: 2px solid var(--ctv-border);
   border-radius: 12px;
   padding: 5px 8px 5px 10px;
   cursor: pointer;

@@ -4,11 +4,11 @@
 (function () {
   "use strict";
 
-  // Claude palette (legacy: user=#5B7BD5, assistant=#6B8E6B)
+  // Muted Claude palette — full-saturation orange (#d97757) is reserved for active state
   const ROLE_COLORS = {
-    user: "#d4d4d4",      // neutral light grey
-    assistant: "#d97757", // Claude orange
-    system: "#888680",    // muted
+    user: "#9c9c98",      // muted grey
+    assistant: "#b08570", // desaturated Claude orange
+    system: "#6f6e6a",    // muted
   };
 
   const ROLE_LABELS = {
