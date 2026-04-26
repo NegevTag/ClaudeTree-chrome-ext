@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Claude Tree Visual",
+  "version": "0.2.6",
+  "description": "Visualize Claude.ai conversations as a navigable tree instead of linear chat",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://claude.ai/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/*"],
+      "js": ["data-normalize.js", "tree-layout.js", "tree-render.js", "content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["bridge.js"],
+      "matches": ["https://claude.ai/*"]
+    }
+  ],
+  "action": {
+    "default_title": "Toggle Claude Tree Visual",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

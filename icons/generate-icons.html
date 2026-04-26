@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<!--
+  Open this file in a browser, right-click each canvas and "Save image as..."
+  to create icon-16.png, icon-32.png, icon-48.png, icon-128.png.
+  Or just use the extension without icons for now (Chrome shows a default).
+-->
+<body style="background:#eee; font-family:sans-serif; padding:20px;">
+<h3>Right-click each → Save image as → icon-{size}.png</h3>
+<div id="out" style="display:flex; gap:20px; align-items:end;"></div>
+<script>
+const sizes = [16, 32, 48, 128];
+const container = document.getElementById('out');
+
+for (const s of sizes) {
+  const c = document.createElement('canvas');
+  c.width = s; c.height = s;
+  const ctx = c.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#5B7BD5';
+  ctx.beginPath();
+  ctx.roundRect(0, 0, s, s, s * 0.15);
+  ctx.fill();
+
+  // Tree icon: simple branching lines
+  ctx.strokeStyle = '#fff';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = Math.max(1.5, s * 0.06);
+
+  const cx = s / 2;
+  // Trunk
+  ctx.beginPath();
+  ctx.moveTo(cx, s * 0.15);
+  ctx.lineTo(cx, s * 0.45);
+  ctx.stroke();
+
+  // Left branch
+  ctx.beginPath();
+  ctx.moveTo(cx, s * 0.45);
+  ctx.lineTo(s * 0.25, s * 0.65);
+  ctx.stroke();
+
+  // Right branch
+  ctx.beginPath();
+  ctx.moveTo(cx, s * 0.45);
+  ctx.lineTo(s * 0.75, s * 0.65);
+  ctx.stroke();
+
+  // Left leaf
+  ctx.beginPath();
+  ctx.moveTo(s * 0.25, s * 0.65);
+  ctx.lineTo(s * 0.25, s * 0.85);
+  ctx.stroke();
+
+  // Right leaf
+  ctx.beginPath();
+  ctx.moveTo(s * 0.75, s * 0.65);
+  ctx.lineTo(s * 0.75, s * 0.85);
+  ctx.stroke();
+
+  // Dots at nodes
+  ctx.fillStyle = '#fff';
+  const r = Math.max(1.5, s * 0.05);
+  for (const [x, y] of [[cx, s*0.15], [cx, s*0.45], [s*0.25, s*0.65], [s*0.75, s*0.65], [s*0.25, s*0.85], [s*0.75, s*0.85]]) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const label = document.createElement('div');
+  label.style.textAlign = 'center';
+  label.innerHTML = `<div>${s}×${s}</div>`;
+  label.prepend(c);
+  container.appendChild(label);
+}
+</script>
+</body>
+</html>
