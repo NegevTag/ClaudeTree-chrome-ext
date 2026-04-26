@@ -267,26 +267,26 @@
 #ctv-reopen-btn {
   position: fixed !important;
   z-index: 2147483646 !important;
-  width: 34px !important;
-  height: 34px !important;
+  width: 26px !important;
+  height: 26px !important;
   border-radius: 50% !important;
-  background: #d4a851 !important;        /* gold accent so it's never lost in dark UI */
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  color: #1c1c1c !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   padding: 0 !important;
   margin: 0 !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(0, 0, 0, 0.3) !important;
-  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease !important;
+  box-shadow: none !important;
+  opacity: 0.7 !important;
+  transition: transform 0.15s ease, opacity 0.15s ease !important;
 }
 
 #ctv-reopen-btn:hover {
-  background: #363636;
-  color: #8ec99a;
-  transform: scale(1.08);
+  opacity: 1 !important;
+  transform: scale(1.1);
 }
 
 #ctv-reopen-btn svg {
