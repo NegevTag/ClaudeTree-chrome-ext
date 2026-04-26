@@ -130,11 +130,11 @@
         card.classList.add("ctv-leaf");
       }
 
-      // Role label
+      // Role label — always use the neutral user color for both "You" and "Claude"
       const roleLabel = document.createElement("span");
       roleLabel.className = "ctv-role";
       roleLabel.textContent = ROLE_LABELS[node.role] || node.role;
-      roleLabel.style.color = roleColor;
+      roleLabel.style.color = ROLE_COLORS.user;
       card.appendChild(roleLabel);
 
       // Datetime badge (top-right, replacing the old index badge)
