@@ -1,8 +1,8 @@
 # Claude Tree Visual
 
-> ⚠️ **Vibe-coded.** Built end-to-end with Claude Code through conversational iteration — no upfront design doc, just shipping features as ideas came up. Treat it accordingly.
-
 Chrome extension that visualizes Claude.ai conversations as a navigable tree instead of linear chat with branch arrows.
+
+> ⚠️ **Vibe-coded.** Built end-to-end with Claude Code through conversational iteration — no upfront design doc, just shipping features as ideas came up. Treat it accordingly.
 
 ## Architecture
 

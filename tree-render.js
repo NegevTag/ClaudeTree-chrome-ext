@@ -164,8 +164,8 @@
         onNodeClick(nodeId);
       });
 
-      // Hover: show full text in title
-      card.title = node.fullText.slice(0, 300);
+      // Hover: show full text in custom tooltip (375ms delay = 0.75 × native ~500ms)
+      attachTooltip(card, node.fullText.slice(0, 600));
 
       canvas.appendChild(card);
     }
@@ -272,6 +272,53 @@
       const el = container.querySelector(`[data-node-id="${id}"]`);
       if (el) el.classList.add("ctv-on-path");
     }
+  }
+
+  // ── Custom tooltip with 375ms delay (0.75× native tooltip delay) ──
+  const TOOLTIP_DELAY_MS = 375;
+  let tooltipEl = null;
+  let tooltipTimer = null;
+
+  function ensureTooltipEl() {
+    if (tooltipEl && document.body.contains(tooltipEl)) return tooltipEl;
+    tooltipEl = document.createElement("div");
+    tooltipEl.id = "ctv-tooltip";
+    document.body.appendChild(tooltipEl);
+    return tooltipEl;
+  }
+
+  function attachTooltip(el, text) {
+    if (!text) return;
+    el.addEventListener("mouseenter", (e) => {
+      clearTimeout(tooltipTimer);
+      tooltipTimer = setTimeout(() => {
+        const t = ensureTooltipEl();
+        t.textContent = text;
+        t.classList.add("ctv-tooltip-visible");
+        positionTooltip(e.clientX, e.clientY);
+      }, TOOLTIP_DELAY_MS);
+    });
+    el.addEventListener("mousemove", (e) => {
+      if (tooltipEl && tooltipEl.classList.contains("ctv-tooltip-visible")) {
+        positionTooltip(e.clientX, e.clientY);
+      }
+    });
+    el.addEventListener("mouseleave", () => {
+      clearTimeout(tooltipTimer);
+      if (tooltipEl) tooltipEl.classList.remove("ctv-tooltip-visible");
+    });
+  }
+
+  function positionTooltip(mx, my) {
+    if (!tooltipEl) return;
+    const offset = 14;
+    const rect = tooltipEl.getBoundingClientRect();
+    let x = mx + offset;
+    let y = my + offset;
+    if (x + rect.width > window.innerWidth - 8) x = mx - rect.width - offset;
+    if (y + rect.height > window.innerHeight - 8) y = my - rect.height - offset;
+    tooltipEl.style.left = x + "px";
+    tooltipEl.style.top = y + "px";
   }
 
   // Expose globally

@@ -457,6 +457,14 @@
     }
   });
 
-  // Show the reopen button on first load (panel starts hidden)
-  ensureReopenButton();
+  // Show the reopen button on first load (panel starts hidden).
+  // Retry a few times in case Claude's SPA wipes the DOM during early hydration.
+  function bootReopenButton() {
+    if (panelVisible) return;
+    ensureReopenButton();
+    console.log("[ClaudeTreeVisual] reopen button mounted:", !!reopenBtnEl, reopenBtnEl);
+  }
+  bootReopenButton();
+  setTimeout(bootReopenButton, 1000);
+  setTimeout(bootReopenButton, 3000);
 })();
