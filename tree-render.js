@@ -114,9 +114,9 @@
       card.style.width = NODE_WIDTH + "px";
       card.style.height = NODE_HEIGHT + "px";
 
-      // Role differentiation via a subtle data attribute (CSS handles styling).
-      // No inline color — keeps resting palette quiet; orange is reserved for active state.
-      card.dataset.role = node.role;
+      // Role color accent (left border)
+      const roleColor = ROLE_COLORS[node.role] || ROLE_COLORS.system;
+      card.style.borderLeftColor = roleColor;
 
       // Branch point indicator
       if (node.isBranchPoint) {
@@ -128,10 +128,11 @@
         card.classList.add("ctv-leaf");
       }
 
-      // Role label (color set via CSS, not inline, so it stays muted)
+      // Role label
       const roleLabel = document.createElement("span");
       roleLabel.className = "ctv-role";
       roleLabel.textContent = ROLE_LABELS[node.role] || node.role;
+      roleLabel.style.color = roleColor;
       card.appendChild(roleLabel);
 
       // Datetime badge (top-right, replacing the old index badge)

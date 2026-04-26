@@ -2,7 +2,3 @@
 node_modules/
 .DS_Store
 *.log
-
-# Screenshots / scratch
-Screenshot*.png
-*.screenshot.png
