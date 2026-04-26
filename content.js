@@ -178,15 +178,29 @@
   let reopenObserver = null;
 
   function findShareAnchor() {
-    // Try to find Claude's Share button. We match by visible text since
-    // class names are obfuscated. Looks at all buttons in the top header.
-    const buttons = document.querySelectorAll("button, a");
-    for (const b of buttons) {
+    // Match by visible text (class names are obfuscated). Multiple "share"
+    // strings can exist (footer links, sidebar items, "share feedback", etc.)
+    // so we score candidates: prefer ones in the top of the viewport,
+    // toward the right, and of reasonable size for a toolbar button.
+    const matches = [];
+    for (const b of document.querySelectorAll("button, a")) {
       const t = (b.textContent || "").trim().toLowerCase();
       const aria = (b.getAttribute("aria-label") || "").toLowerCase();
-      if (t === "share" || aria.includes("share")) return b;
+      if (t !== "share" && !aria.includes("share")) continue;
+      const r = b.getBoundingClientRect();
+      // Skip offscreen / zero-size matches
+      if (r.width < 20 || r.height < 20) continue;
+      if (r.bottom < 0 || r.top > window.innerHeight) continue;
+      // Score: lower top + higher right = better (toolbar Share is top-right)
+      const score = r.top - r.right;
+      matches.push({ el: b, score, top: r.top });
     }
-    return null;
+    if (!matches.length) return null;
+    // Require it to be in the top third of the viewport — toolbar buttons live there
+    matches.sort((a, b) => a.score - b.score);
+    const best = matches[0];
+    if (best.top > window.innerHeight / 3) return null;
+    return best.el;
   }
 
   function ensureReopenButton() {
